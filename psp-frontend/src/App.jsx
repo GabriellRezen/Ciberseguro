@@ -9,6 +9,8 @@ import HistoryPage from "./pages/HistoryPage";
 import AssistentePage from "./pages/AssistentePage";
 import PerfilPage from "./pages/PerfilPage";
 import ApoioPage from "./pages/ApoioPage";
+import { ChatbotWidget } from "./components/ChatbotWidget/ChatbotWidget";
+
 
 const App = () => {
     return (
@@ -28,6 +30,7 @@ const App = () => {
             </Routes>
           </div>
         </BrowserRouter>
+        <ChatbotWidget />
       </AuthProvider>
     );
 };

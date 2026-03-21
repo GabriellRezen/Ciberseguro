@@ -11,9 +11,11 @@ import { ChatModule } from './modules/chat/chat.module';
 import { PrintAnalysisModule } from './modules/print-analysis/print-analysis.module';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from 'prisma/prisma.module';
+import { ChatbotModule } from './modules/chatbot/chatbot.module';
 
 @Module({
   imports: [
+    ChatbotModule,
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: envValidationSchema,
