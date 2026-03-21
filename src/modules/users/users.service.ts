@@ -35,18 +35,16 @@ export class UsersService {
   }
 
   async getHistory(userId: string, query: UserHistoryQueryDto) {
-    const [profile, analyses, chats, reports] = await Promise.all([
+    const [profile, analyses, chats] = await Promise.all([
       this.getProfile(userId),
       this.getAnalyses(userId, query),
       this.getChats(userId, query),
-      this.getReports(userId, query),
     ]);
 
     return {
       profile,
       analyses,
       chats,
-      reports,
     };
   }
 
@@ -58,7 +56,6 @@ export class UsersService {
         where: { userId },
         include: {
           evidences: true,
-          reports: true,
         },
         orderBy: { createdAt: 'desc' },
         skip,
@@ -88,27 +85,6 @@ export class UsersService {
         take,
       }),
       this.prisma.chatSession.count({
-        where: { userId },
-      }),
-    ]);
-
-    return this.paginated(items, total, page, limit);
-  }
-
-  async getReports(userId: string, query: UserHistoryQueryDto) {
-    const { skip, take, page, limit } = this.getPagination(query);
-
-    const [items, total] = await Promise.all([
-      this.prisma.report.findMany({
-        where: { userId },
-        include: {
-          analysisRequest: true,
-        },
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take,
-      }),
-      this.prisma.report.count({
         where: { userId },
       }),
     ]);

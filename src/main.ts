@@ -8,6 +8,7 @@ import { LoggerInterceptor } from './common/interceptors/logger.interceptor';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { PrismaService } from 'prisma/prisma.service';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

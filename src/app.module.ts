@@ -4,19 +4,13 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { envValidationSchema } from './config/env.validation';
-import { AppController } from './app.controller';
 import { GeminiModule } from './integrations/gemini/gemini.module';
 import { AiTriageModule } from './modules/ai-triage/ai-triage.module';
-import { ChatModule } from './modules/chat/chat.module';
-import { ContentModule } from './modules/content/content.module';
-import { HealthModule } from './modules/health/health.module';
-import { PrintAnalysisModule } from './modules/print-analysis/print-analysis.module';
-import { PspCentersModule } from './modules/psp-centers/psp-centers.module';
-import { ReportsModule } from './modules/reports/reports.module';
-import { SupportModule } from './modules/support/support.module';
-import { PrismaModule } from 'prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ChatModule } from './modules/chat/chat.module';
+import { PrintAnalysisModule } from './modules/print-analysis/print-analysis.module';
 import { UsersModule } from './modules/users/users.module';
+import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
   imports: [
@@ -36,16 +30,11 @@ import { UsersModule } from './modules/users/users.module';
     }),
     PrismaModule,
     GeminiModule,
-    HealthModule,
-    ContentModule,
-    PspCentersModule,
-    SupportModule,
+    AuthModule,
+    UsersModule,
     ChatModule,
     AiTriageModule,
     PrintAnalysisModule,
-    ReportsModule,
-    AuthModule,
-    UsersModule,
   ],
 })
 export class AppModule {}

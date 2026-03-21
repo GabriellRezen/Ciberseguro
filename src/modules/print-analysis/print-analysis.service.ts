@@ -11,6 +11,7 @@ import {
 import { GeminiService } from '../../integrations/gemini/gemini.service';
 import { PrismaService } from 'prisma/prisma.service';
 
+
 @Injectable()
 export class PrintAnalysisService {
   constructor(
@@ -18,7 +19,7 @@ export class PrintAnalysisService {
     private readonly geminiService: GeminiService,
   ) {}
 
-  async uploadAndAnalyze(file: Express.Multer.File, userId?: string) {
+  async uploadAndAnalyze(file: Express.Multer.File, userId: string) {
     if (!file) {
       throw new BadRequestException('File not provided');
     }
@@ -69,27 +70,14 @@ export class PrintAnalysisService {
     };
   }
 
-  async analyzeExistingEvidence(analysisId: string) {
-    const analysis = await this.prisma.analysisRequest.findUnique({
-      where: { id: analysisId },
-      include: {
-        evidences: true,
+  async getResult(id: string, userId: string) {
+    const analysis = await this.prisma.analysisRequest.findFirst({
+      where: {
+        id,
+        userId,
       },
-    });
-
-    if (!analysis) {
-      throw new NotFoundException('Analysis request not found');
-    }
-
-    return analysis;
-  }
-
-  async getResult(id: string) {
-    const analysis = await this.prisma.analysisRequest.findUnique({
-      where: { id },
       include: {
         evidences: true,
-        reports: true,
       },
     });
 

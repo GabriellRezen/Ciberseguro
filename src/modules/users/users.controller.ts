@@ -44,13 +44,4 @@ export class UsersController {
   ) {
     return this.usersService.getChats(user.userId, query);
   }
-
-  @Get('reports')
-  @ApiOperation({ summary: 'Get authenticated user reports' })
-  reports(
-    @CurrentUser() user: { userId: string },
-    @Query() query: UserHistoryQueryDto,
-  ) {
-    return this.usersService.getReports(user.userId, query);
-  }
 }

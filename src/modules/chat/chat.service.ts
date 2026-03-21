@@ -5,6 +5,7 @@ import { CreateChatSessionDto } from './dto/create-chat-session.dto';
 import { SendChatMessageDto } from './dto/send-chat-message.dto';
 import { PrismaService } from 'prisma/prisma.service';
 
+
 @Injectable()
 export class ChatService {
   constructor(
@@ -12,7 +13,7 @@ export class ChatService {
     private readonly geminiService: GeminiService,
   ) {}
 
-  async createSession(_dto: CreateChatSessionDto, userId?: string) {
+  async createSession(_dto: CreateChatSessionDto, userId: string) {
     return this.prisma.chatSession.create({
       data: {
         status: 'active',
@@ -21,9 +22,12 @@ export class ChatService {
     });
   }
 
-  async getSession(sessionId: string) {
-    const session = await this.prisma.chatSession.findUnique({
-      where: { id: sessionId },
+  async getSession(sessionId: string, userId: string) {
+    const session = await this.prisma.chatSession.findFirst({
+      where: {
+        id: sessionId,
+        userId,
+      },
       include: {
         messages: {
           orderBy: { createdAt: 'asc' },
@@ -38,9 +42,16 @@ export class ChatService {
     return session;
   }
 
-  async sendMessage(sessionId: string, dto: SendChatMessageDto) {
-    const session = await this.prisma.chatSession.findUnique({
-      where: { id: sessionId },
+  async sendMessage(
+    sessionId: string,
+    dto: SendChatMessageDto,
+    userId: string,
+  ) {
+    const session = await this.prisma.chatSession.findFirst({
+      where: {
+        id: sessionId,
+        userId,
+      },
       include: {
         messages: {
           orderBy: { createdAt: 'asc' },
@@ -86,8 +97,11 @@ export class ChatService {
       },
     });
 
-    const finalSession = await this.prisma.chatSession.findUnique({
-      where: { id: sessionId },
+    const finalSession = await this.prisma.chatSession.findFirst({
+      where: {
+        id: sessionId,
+        userId,
+      },
       include: {
         messages: {
           orderBy: { createdAt: 'asc' },
@@ -104,12 +118,5 @@ export class ChatService {
         suggestedActions: aiReply.suggestedActions,
       },
     };
-  }
-
-  async getQuickActions() {
-    return this.prisma.quickAction.findMany({
-      where: { isActive: true },
-      orderBy: { priority: 'asc' },
-    });
   }
 }

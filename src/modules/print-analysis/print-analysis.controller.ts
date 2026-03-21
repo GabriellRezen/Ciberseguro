@@ -7,14 +7,23 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { multerImageConfig } from '../../common/utils/upload/multer.config';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PrintAnalysisService } from './print-analysis.service';
 
 @ApiTags('Print Analysis')
 @Controller('print-analysis')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class PrintAnalysisController {
   constructor(private readonly printAnalysisService: PrintAnalysisService) {}
 
@@ -36,18 +45,14 @@ export class PrintAnalysisController {
   })
   upload(
     @UploadedFile() file: Express.Multer.File,
-    @CurrentUser() user: { userId: string } | null,
+    @CurrentUser() user: { userId: string },
   ) {
-    return this.printAnalysisService.uploadAndAnalyze(file, user?.userId);
-  }
-
-  @Post(':id/analyze')
-  analyze(@Param('id') id: string) {
-    return this.printAnalysisService.analyzeExistingEvidence(id);
+    return this.printAnalysisService.uploadAndAnalyze(file, user.userId);
   }
 
   @Get(':id/result')
-  getResult(@Param('id') id: string) {
-    return this.printAnalysisService.getResult(id);
+  @ApiOperation({ summary: 'Get analysis result' })
+  getResult(@Param('id') id: string, @CurrentUser() user: { userId: string }) {
+    return this.printAnalysisService.getResult(id, user.userId);
   }
 }

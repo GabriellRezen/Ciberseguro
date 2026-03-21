@@ -15,7 +15,7 @@ export class AiTriageService {
     private readonly geminiService: GeminiService,
   ) {}
 
-  async analyzeText(dto: AnalyzeTextDto, userId?: string) {
+  async analyzeText(dto: AnalyzeTextDto, userId: string) {
     const aiResult = await this.geminiService.analyzeCyberbullyingText(
       dto.text,
     );

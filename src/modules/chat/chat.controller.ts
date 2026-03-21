@@ -1,12 +1,15 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ChatService } from './chat.service';
 import { CreateChatSessionDto } from './dto/create-chat-session.dto';
 import { SendChatMessageDto } from './dto/send-chat-message.dto';
 
 @ApiTags('Chat')
 @Controller('chat')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
@@ -14,15 +17,18 @@ export class ChatController {
   @ApiOperation({ summary: 'Create a new chat session' })
   createSession(
     @Body() dto: CreateChatSessionDto,
-    @CurrentUser() user: { userId: string } | null,
+    @CurrentUser() user: { userId: string },
   ) {
-    return this.chatService.createSession(dto, user?.userId);
+    return this.chatService.createSession(dto, user.userId);
   }
 
   @Get('sessions/:sessionId')
   @ApiOperation({ summary: 'Get chat session and messages' })
-  getSession(@Param('sessionId') sessionId: string) {
-    return this.chatService.getSession(sessionId);
+  getSession(
+    @Param('sessionId') sessionId: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.chatService.getSession(sessionId, user.userId);
   }
 
   @Post('sessions/:sessionId/messages')
@@ -30,13 +36,8 @@ export class ChatController {
   sendMessage(
     @Param('sessionId') sessionId: string,
     @Body() dto: SendChatMessageDto,
+    @CurrentUser() user: { userId: string },
   ) {
-    return this.chatService.sendMessage(sessionId, dto);
-  }
-
-  @Get('quick-actions')
-  @ApiOperation({ summary: 'Get predefined quick action buttons' })
-  getQuickActions() {
-    return this.chatService.getQuickActions();
+    return this.chatService.sendMessage(sessionId, dto, user.userId);
   }
 }
