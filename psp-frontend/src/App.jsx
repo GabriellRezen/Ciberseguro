@@ -7,6 +7,8 @@ import Analyze from "./pages/Analyze";
 import Contacts from "./pages/Contacts";
 import HistoryPage from "./pages/HistoryPage";
 import AssistentePage from "./pages/AssistentePage";
+import PerfilPage from "./pages/PerfilPage";
+import ApoioPage from "./pages/ApoioPage";
 
 const App = () => {
     return (
@@ -21,6 +23,8 @@ const App = () => {
               <Route path="/contactos" element={<Contacts />} />
               <Route path="/historico" element={<HistoryPage />} />
               <Route path="/assistente" element={<AssistentePage />} />
+              <Route path="/perfil" element={<PerfilPage />} />
+              <Route path="/apoio" element={<ApoioPage />} />
             </Routes>
           </div>
         </BrowserRouter>
