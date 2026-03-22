@@ -194,7 +194,8 @@ const ApoioPage = () => {
               <InfoItem
                 icon={Globe}
                 label="Website"
-                value="www.psp.pt/ciberseguranca"
+                value="www.psp.pt
+                "
                 helper="Informação e recursos"
               />
 

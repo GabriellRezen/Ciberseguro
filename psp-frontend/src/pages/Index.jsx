@@ -15,7 +15,7 @@ import ActionCard from "@/components/ActionCard";
 const stats = [
   { value: "37%", label: "dos jovens portugueses já sofreram ciberbullying" },
   { value: "1 em 3", label: "não conta a ninguém o que está a passar" },
-  { value: "24/7", label: "apoio disponível através da PSP" },
+  { value: "Não estás sozinho/a", label: "temos apoio disponível para vítimas de ciberbullying" },
 ];
 
 const Index = () => {
@@ -231,22 +231,6 @@ const Index = () => {
           </div>
         </motion.div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-card">
-        <div className="container py-8 text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Shield size={18} className="text-secondary" />
-            <span className="text-sm font-semibold text-foreground">
-              CiberSeguro
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Plataforma de prevenção ao ciberbullying · Polícia de Segurança
-            Pública
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

@@ -174,8 +174,8 @@ const stations = [
         lng: -9.1530,
     },
     {
-        type: "esquadra",
-        name: "Esquadra de Moscavide — GreenCampus",
+        type: "comando",
+        name: "Comando de Moscavide — GreenCampus",
         address: "GreenCampus, Av. D. João II — 1885-062 Moscavide",
         phone: "218 680 030",
         hours: "24 horas",

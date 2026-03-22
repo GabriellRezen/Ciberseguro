@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { AuthProvider } from "@/content/AuthContent";
 import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
@@ -10,12 +11,21 @@ import AssistentePage from "./pages/AssistentePage";
 import PerfilPage from "./pages/PerfilPage";
 import ApoioPage from "./pages/ApoioPage";
 import { ChatbotWidget } from "./components/ChatbotWidget/ChatbotWidget";
+import Footer from "./components/Footer";
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 const App = () => {
     return (
       <AuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Navbar />
           <div className="pt-16">
             <Routes>
@@ -29,6 +39,7 @@ const App = () => {
               <Route path="/apoio" element={<ApoioPage />} />
             </Routes>
           </div>
+          <Footer />
         </BrowserRouter>
         <ChatbotWidget />
       </AuthProvider>
