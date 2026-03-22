@@ -49,6 +49,59 @@ export class GeminiService {
       this.configService.get<string>('GEMINI_MODEL') ?? 'gemini-2.5-flash';
   }
 
+  async generateWebsiteChatReply(
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>,
+) {
+  const conversation = messages
+    .map((message) => `${message.role.toUpperCase()}: ${message.content}`)
+    .join('\n');
+
+  const prompt = `
+Tu és um assistente virtual do site PSP de apoio ao ciberbullying.
+
+A tua função é:
+- responder dúvidas sobre o funcionamento do site;
+- explicar as funcionalidades disponíveis;
+- indicar onde o utilizador deve ir dentro da plataforma;
+- responder apenas com base na informação fornecida na conversa.
+
+Regras:
+- Não inventes funcionalidades.
+- Se a resposta não estiver disponível no contexto, diz isso claramente.
+- Fala em português europeu.
+- Responde de forma curta, clara e útil.
+
+Devolve APENAS JSON válido:
+{
+  "reply": "string",
+  "suggestedActions": ["string", "string"]
+}
+
+Conversa:
+${conversation}
+`;
+
+  const response = await this.client.models.generateContent({
+    model: this.model,
+    contents: prompt,
+    config: {
+      responseMimeType: 'application/json',
+    },
+  });
+
+  const rawText = response.text;
+
+  if (!rawText) {
+    throw new Error('Empty response from Gemini');
+  }
+
+  const parsed = JSON.parse(rawText);
+
+  return {
+    reply: parsed.reply,
+    suggestedActions: parsed.suggestedActions ?? [],
+  };
+}
   async analyzeCyberbullyingText(text: string): Promise<TriageResult> {
     const prompt = `
 Tu és um assistente de triagem para uma plataforma de apoio ao ciberbullying.
