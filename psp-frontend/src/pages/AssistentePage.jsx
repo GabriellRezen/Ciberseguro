@@ -29,7 +29,6 @@ const formatDate = (dateString) => {
 
 const getSessionPreview = (session) => {
   if (!session?.messages?.length) return "Nova conversa";
-
   const firstUserMessage = session.messages.find((m) => m.role === "user");
   return firstUserMessage?.content?.slice(0, 48) || "Conversa";
 };
@@ -41,13 +40,13 @@ const MessageBubble = ({ message }) => {
     <div className={`flex ${isAssistant ? "justify-start" : "justify-end"}`}>
       <div
         className={[
-          "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
+          "max-w-[90%] sm:max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
           isAssistant
             ? "bg-card border border-border text-foreground"
             : "bg-secondary text-secondary-foreground",
         ].join(" ")}
       >
-        <div className="whitespace-pre-wrap">{message.content}</div>
+        <div className="whitespace-pre-wrap break-words">{message.content}</div>
 
         {isAssistant && message.intent && (
           <div className="mt-2 text-[11px] text-muted-foreground">
@@ -97,8 +96,7 @@ const AssistentePage = () => {
       setSessions(items);
 
       if (!activeSessionId && items.length > 0) {
-        const firstId = items[0].id;
-        setActiveSessionId(firstId);
+        setActiveSessionId(items[0].id);
       }
     } catch (err) {
       setError(err.message);
@@ -113,7 +111,6 @@ const AssistentePage = () => {
     try {
       setLoadingSession(true);
       setError(null);
-
       const data = await apiFetch(`/chat/sessions/${sessionId}`);
       setActiveSession(data);
       setActiveSessionId(sessionId);
@@ -135,10 +132,7 @@ const AssistentePage = () => {
         body: JSON.stringify({}),
       });
 
-      const newSession = {
-        ...data,
-        messages: [],
-      };
+      const newSession = { ...data, messages: [] };
 
       setSessions((prev) => [newSession, ...prev]);
       setActiveSessionId(newSession.id);
@@ -159,7 +153,6 @@ const AssistentePage = () => {
     setMessage("");
     setError(null);
 
-    // optimistic user message
     const optimisticUserMessage = {
       id: `temp-${Date.now()}`,
       role: "user",
@@ -190,13 +183,10 @@ const AssistentePage = () => {
 
       setActiveSession(data.session);
       setAssistantMeta(data.assistant);
-
-      // refresh sidebar sessions
       await loadChats();
     } catch (err) {
       setError(err.message);
 
-      // rollback optimistic update on error
       setActiveSession((prev) =>
         prev
           ? {
@@ -215,13 +205,11 @@ const AssistentePage = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
     loadChats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
     if (activeSessionId) loadSession(activeSessionId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSessionId, isAuthenticated]);
 
   useEffect(() => {
@@ -235,7 +223,7 @@ const AssistentePage = () => {
           !isAuthenticated ? "pointer-events-none select-none blur-sm" : ""
         }
       >
-        <div className="container py-8 max-w-7xl mx-auto px-4">
+        <div className="container py-6 md:py-8 max-w-7xl mx-auto px-4">
           <PageHeader
             icon={Bot}
             title="Assistente inteligente"
@@ -256,9 +244,9 @@ const AssistentePage = () => {
             )}
           </AnimatePresence>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-4 md:gap-6">
             {/* Sidebar */}
-            <aside className="bg-card rounded-2xl border border-border p-4 h-[75vh] flex flex-col">
+            <aside className="bg-card rounded-2xl border border-border p-4 xl:h-[75vh] flex flex-col">
               <div className="flex items-center justify-between gap-3 mb-4">
                 <div>
                   <h2 className="text-base font-bold text-foreground">
@@ -279,11 +267,11 @@ const AssistentePage = () => {
                   ) : (
                     <Plus size={14} />
                   )}
-                  Nova
+                  <span className="hidden sm:inline">Nova</span>
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+              <div className="max-h-[240px] xl:max-h-none xl:flex-1 overflow-y-auto space-y-2 pr-1">
                 {sessionsLoading ? (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground p-3">
                     <Loader2 size={14} className="animate-spin" />A carregar
@@ -333,22 +321,22 @@ const AssistentePage = () => {
             </aside>
 
             {/* Main Chat */}
-            <section className="bg-card rounded-2xl border border-border h-[75vh] flex flex-col overflow-hidden">
-              <div className="border-b border-border px-5 py-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+            <section className="bg-card rounded-2xl border border-border min-h-[70vh] xl:h-[75vh] flex flex-col overflow-hidden">
+              <div className="border-b border-border px-4 md:px-5 py-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                   <Shield size={18} className="text-secondary" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h2 className="text-base font-bold text-foreground">
                     Assistente de apoio
                   </h2>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground line-clamp-2">
                     Respostas orientadas para ciberbullying e segurança digital
                   </p>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+              <div className="flex-1 overflow-y-auto px-4 md:px-5 py-5 space-y-4">
                 {loadingSession ? (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Loader2 size={16} className="animate-spin" />A carregar
@@ -403,6 +391,7 @@ const AssistentePage = () => {
                         {activeSession.messages.map((msg) => (
                           <MessageBubble key={msg.id} message={msg} />
                         ))}
+
                         {sendingMessage && (
                           <div className="flex justify-start">
                             <div className="bg-card border border-border rounded-2xl px-4 py-3 text-sm text-muted-foreground flex items-center gap-2">
@@ -424,7 +413,7 @@ const AssistentePage = () => {
                             (action, index) => (
                               <div
                                 key={index}
-                                className="text-sm text-muted-foreground"
+                                className="text-sm text-muted-foreground break-words"
                               >
                                 • {action}
                               </div>
@@ -439,7 +428,7 @@ const AssistentePage = () => {
                 )}
               </div>
 
-              <div className="border-t border-border p-4">
+              <div className="border-t border-border p-3 md:p-4">
                 <div className="flex items-end gap-3">
                   <textarea
                     value={message}
@@ -461,7 +450,7 @@ const AssistentePage = () => {
                     disabled={
                       !message.trim() || !activeSession || sendingMessage
                     }
-                    className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
                   >
                     {sendingMessage ? (
                       <Loader2 size={18} className="animate-spin" />

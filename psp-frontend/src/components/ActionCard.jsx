@@ -28,7 +28,14 @@ const variants = {
   },
 };
 
-const ActionCard = ({ icon: Icon, title, description, to, variant = "default", delay = 0 }) => {
+const ActionCard = ({
+  icon: Icon,
+  title,
+  description,
+  to,
+  variant = "default",
+  delay = 0,
+}) => {
   const v = variants[variant];
 
   return (
@@ -39,15 +46,29 @@ const ActionCard = ({ icon: Icon, title, description, to, variant = "default", d
       transition={{ delay }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`block p-6 rounded-xl card-shadow transition-colors cursor-pointer ${v.card}`}
+      className={`block h-full p-5 md:p-6 rounded-xl card-shadow transition-colors cursor-pointer ${v.card}`}
     >
-      <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${v.icon}`}>
-        <Icon size={20} className={v.iconColor} />
-      </div>
-      <h3 className={`font-semibold text-base mb-2 ${v.title}`}>{title}</h3>
-      <p className={`text-sm leading-relaxed mb-4 ${v.desc}`}>{description}</p>
-      <div className={`flex items-center gap-1 text-sm font-medium ${v.arrow}`}>
-        Saber mais <ArrowRight size={14} />
+      <div className="flex flex-col h-full min-w-0">
+        <div
+          className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 shrink-0 ${v.icon}`}
+        >
+          <Icon size={20} className={v.iconColor} />
+        </div>
+
+        <h3 className={`font-semibold text-base mb-2 break-words ${v.title}`}>
+          {title}
+        </h3>
+
+        <p className={`text-sm leading-relaxed mb-4 break-words ${v.desc}`}>
+          {description}
+        </p>
+
+        <div
+          className={`mt-auto flex items-center gap-1 text-sm font-medium ${v.arrow}`}
+        >
+          Saber mais
+          <ArrowRight size={14} />
+        </div>
       </div>
     </motion.a>
   );

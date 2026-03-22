@@ -38,12 +38,12 @@ const severityToRisk = {
 };
 
 const EmptyState = ({ icon: Icon, title, description }) => (
-  <div className="bg-card rounded-xl border border-border p-8 text-center">
+  <div className="bg-card rounded-xl border border-border p-6 md:p-8 text-center">
     <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center mx-auto mb-4">
       <Icon size={22} className="text-secondary" />
     </div>
     <h3 className="text-base font-semibold text-foreground mb-2">{title}</h3>
-    <p className="text-sm text-muted-foreground">{description}</p>
+    <p className="text-sm text-muted-foreground break-words">{description}</p>
   </div>
 );
 
@@ -51,17 +51,17 @@ const Pagination = ({ page, totalPages, onPrev, onNext }) => {
   if (!totalPages || totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-center gap-3 pt-2">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
       <button
         onClick={onPrev}
         disabled={page <= 1}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors w-full sm:w-auto justify-center"
       >
         <ChevronLeft size={16} />
         Anterior
       </button>
 
-      <span className="text-sm text-muted-foreground">
+      <span className="text-sm text-muted-foreground text-center">
         Página <span className="font-medium text-foreground">{page}</span> de{" "}
         <span className="font-medium text-foreground">{totalPages}</span>
       </span>
@@ -69,7 +69,7 @@ const Pagination = ({ page, totalPages, onPrev, onNext }) => {
       <button
         onClick={onNext}
         disabled={page >= totalPages}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors w-full sm:w-auto justify-center"
       >
         Seguinte
         <ChevronRight size={16} />
@@ -82,7 +82,7 @@ const ProfileCard = ({ profile }) => {
   if (!profile) return null;
 
   return (
-    <div className="bg-card rounded-xl border border-border p-6">
+    <div className="bg-card rounded-xl border border-border p-5 md:p-6">
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center shrink-0">
           <User size={22} className="text-secondary" />
@@ -92,8 +92,12 @@ const ProfileCard = ({ profile }) => {
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
             Perfil
           </p>
-          <h3 className="text-lg font-bold text-foreground">{profile.name}</h3>
-          <p className="text-sm text-muted-foreground">{profile.email}</p>
+          <h3 className="text-lg font-bold text-foreground break-words">
+            {profile.name}
+          </h3>
+          <p className="text-sm text-muted-foreground break-words">
+            {profile.email}
+          </p>
           <p className="text-xs text-muted-foreground mt-2">
             Conta criada em {formatDate(profile.createdAt)}
           </p>
@@ -109,7 +113,7 @@ const AnalysisCard = ({ analysis }) => (
     animate={{ opacity: 1, y: 0 }}
     className="bg-card rounded-xl border border-border p-5"
   >
-    <div className="flex items-start justify-between gap-4 mb-3">
+    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
       <div className="min-w-0">
         <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
           Análise
@@ -120,11 +124,13 @@ const AnalysisCard = ({ analysis }) => (
       </div>
 
       {analysis.severity && (
-        <RiskBadge level={severityToRisk[analysis.severity] ?? "low"} />
+        <div className="self-start">
+          <RiskBadge level={severityToRisk[analysis.severity] ?? "low"} />
+        </div>
       )}
     </div>
 
-    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+    <p className="text-sm text-muted-foreground leading-relaxed mb-4 break-words">
       {analysis.aiSummary ||
         analysis.originalText ||
         "Sem descrição disponível."}
@@ -138,7 +144,10 @@ const AnalysisCard = ({ analysis }) => (
           </p>
           <div className="space-y-2">
             {analysis.recommendedActions.slice(0, 3).map((action, index) => (
-              <div key={index} className="text-sm text-muted-foreground">
+              <div
+                key={index}
+                className="text-sm text-muted-foreground break-words"
+              >
                 • {action}
               </div>
             ))}
@@ -147,7 +156,7 @@ const AnalysisCard = ({ analysis }) => (
       )}
 
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-      <Calendar size={13} />
+      <Calendar size={13} className="shrink-0" />
       {formatDate(analysis.createdAt)}
     </div>
   </motion.div>
@@ -165,12 +174,12 @@ const ChatCard = ({ chat }) => {
       animate={{ opacity: 1, y: 0 }}
       className="bg-card rounded-xl border border-border p-5"
     >
-      <div className="flex items-start justify-between gap-4 mb-3">
-        <div>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+        <div className="min-w-0">
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
             Conversa
           </p>
-          <h3 className="text-base font-semibold text-foreground">
+          <h3 className="text-base font-semibold text-foreground break-words">
             Sessão #{chat.id.slice(0, 8)}
           </h3>
         </div>
@@ -180,12 +189,12 @@ const ChatCard = ({ chat }) => {
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+      <p className="text-sm text-muted-foreground leading-relaxed mb-4 break-words">
         {lastMessage?.content || "Ainda sem mensagens nesta sessão."}
       </p>
 
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Calendar size={13} />
+        <Calendar size={13} className="shrink-0" />
         {formatDate(chat.startedAt)}
       </div>
     </motion.div>
@@ -278,7 +287,7 @@ const HistoryPage = () => {
           !isAuthenticated ? "pointer-events-none select-none blur-sm" : ""
         }
       >
-        <div className="container py-8 max-w-5xl mx-auto px-4">
+        <div className="container py-6 md:py-8 max-w-5xl mx-auto px-4">
           <PageHeader
             icon={History}
             title="Histórico"
@@ -299,7 +308,7 @@ const HistoryPage = () => {
             )}
           </AnimatePresence>
 
-          <div className="space-y-8">
+          <div className="space-y-7 md:space-y-8">
             <section>
               {loadingProfile ? (
                 <div className="bg-card rounded-xl border border-border p-6 flex items-center gap-3 text-sm text-muted-foreground">
@@ -313,10 +322,10 @@ const HistoryPage = () => {
 
             <section className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                   <Search size={18} className="text-secondary" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h2 className="text-lg font-bold text-foreground">
                     Análises
                   </h2>
@@ -363,10 +372,10 @@ const HistoryPage = () => {
 
             <section className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                   <MessageSquare size={18} className="text-secondary" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h2 className="text-lg font-bold text-foreground">
                     Conversas
                   </h2>

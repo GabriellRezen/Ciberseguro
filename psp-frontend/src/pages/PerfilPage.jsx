@@ -39,11 +39,15 @@ const StatCard = ({ icon: Icon, title, value, subtitle }) => (
       <div className="w-11 h-11 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
         <Icon size={20} className="text-secondary" />
       </div>
-      <div>
+      <div className="min-w-0">
         <p className="text-sm text-muted-foreground">{title}</p>
-        <h3 className="text-2xl font-bold text-foreground mt-1">{value}</h3>
+        <h3 className="text-2xl font-bold text-foreground mt-1 break-words">
+          {value}
+        </h3>
         {subtitle && (
-          <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
+          <p className="text-xs text-muted-foreground mt-1 break-words">
+            {subtitle}
+          </p>
         )}
       </div>
     </div>
@@ -55,11 +59,11 @@ const InfoRow = ({ icon: Icon, label, value }) => (
     <div className="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center shrink-0">
       <Icon size={16} className="text-secondary" />
     </div>
-    <div>
+    <div className="min-w-0">
       <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
         {label}
       </p>
-      <p className="text-sm text-foreground mt-1">{value}</p>
+      <p className="text-sm text-foreground mt-1 break-words">{value}</p>
     </div>
   </div>
 );
@@ -120,7 +124,7 @@ const PerfilPage = () => {
           !isAuthenticated ? "pointer-events-none select-none blur-sm" : ""
         }
       >
-        <div className="container py-8 max-w-5xl mx-auto px-4">
+        <div className="container py-6 md:py-8 max-w-5xl mx-auto px-4">
           <PageHeader
             icon={User}
             title="Perfil"
@@ -146,18 +150,18 @@ const PerfilPage = () => {
               <Loader2 size={16} className="animate-spin" />A carregar perfil...
             </div>
           ) : profile ? (
-            <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-5 md:gap-6">
               {/* Main */}
-              <div className="space-y-6">
-                <div className="bg-card rounded-2xl border border-border p-6">
-                  <div className="flex items-start justify-between gap-4 flex-wrap">
-                    <div className="flex items-start gap-4">
+              <div className="space-y-5 md:space-y-6">
+                <div className="bg-card rounded-2xl border border-border p-5 md:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div className="flex items-start gap-4 min-w-0">
                       <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center shrink-0">
                         <User size={24} className="text-secondary" />
                       </div>
 
-                      <div>
-                        <h2 className="text-xl font-bold text-foreground">
+                      <div className="min-w-0">
+                        <h2 className="text-xl font-bold text-foreground break-words">
                           {profile.name}
                         </h2>
                         <p className="text-sm text-muted-foreground mt-1">
@@ -168,7 +172,7 @@ const PerfilPage = () => {
 
                     <button
                       onClick={handleLogout}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors w-full sm:w-auto"
                     >
                       <LogOut size={16} />
                       Terminar sessão
@@ -194,7 +198,7 @@ const PerfilPage = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <StatCard
                     icon={Search}
                     title="Análises realizadas"
@@ -211,8 +215,8 @@ const PerfilPage = () => {
               </div>
 
               {/* Sidebar */}
-              <div className="space-y-6">
-                <div className="bg-card rounded-2xl border border-border p-6">
+              <div className="space-y-5 md:space-y-6">
+                <div className="bg-card rounded-2xl border border-border p-5 md:p-6">
                   <h3 className="text-base font-bold text-foreground mb-4">
                     Acesso rápido
                   </h3>
@@ -220,13 +224,13 @@ const PerfilPage = () => {
                   <div className="space-y-3">
                     <Link
                       to="/assistente"
-                      className="flex items-center justify-between px-4 py-3 rounded-xl border border-border hover:bg-muted transition-colors"
+                      className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-border hover:bg-muted transition-colors"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                           <MessageSquare size={18} className="text-secondary" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-sm font-medium text-foreground">
                             Assistente
                           </p>
@@ -235,18 +239,21 @@ const PerfilPage = () => {
                           </p>
                         </div>
                       </div>
-                      <ArrowRight size={16} className="text-muted-foreground" />
+                      <ArrowRight
+                        size={16}
+                        className="text-muted-foreground shrink-0"
+                      />
                     </Link>
 
                     <Link
                       to="/historico"
-                      className="flex items-center justify-between px-4 py-3 rounded-xl border border-border hover:bg-muted transition-colors"
+                      className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-border hover:bg-muted transition-colors"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                           <History size={18} className="text-secondary" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-sm font-medium text-foreground">
                             Histórico
                           </p>
@@ -255,15 +262,19 @@ const PerfilPage = () => {
                           </p>
                         </div>
                       </div>
-                      <ArrowRight size={16} className="text-muted-foreground" />
+                      <ArrowRight
+                        size={16}
+                        className="text-muted-foreground shrink-0"
+                      />
                     </Link>
                   </div>
                 </div>
 
-                <div className="bg-card rounded-2xl border border-border p-6">
+                <div className="bg-card rounded-2xl border border-border p-5 md:p-6">
                   <h3 className="text-base font-bold text-foreground mb-3">
                     Resumo
                   </h3>
+
                   {loadingHistory ? (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Loader2 size={14} className="animate-spin" />A carregar

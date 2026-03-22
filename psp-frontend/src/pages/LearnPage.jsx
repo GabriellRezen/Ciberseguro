@@ -5,7 +5,6 @@ import {
   MessageSquareWarning,
   AlertTriangle,
   Eye,
-  ArrowRight,
   Shield,
   CheckCircle,
   BarChart3,
@@ -234,14 +233,14 @@ const ExpandableStory = ({ story, index }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
-      className="bg-card rounded-xl border border-border p-6 card-shadow"
+      className="bg-card rounded-xl border border-border p-5 md:p-6 card-shadow"
     >
       <div className="flex items-start gap-3 mb-4">
         <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0 mt-0.5">
           <Quote size={18} className="text-secondary" />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="text-xs font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
               {story.age}
             </span>
@@ -252,7 +251,7 @@ const ExpandableStory = ({ story, index }) => {
         </div>
       </div>
 
-      <blockquote className="text-sm text-foreground/90 leading-relaxed italic mb-4 overflow-wrap-anywhere">
+      <blockquote className="text-sm text-foreground/90 leading-relaxed italic mb-4 break-words">
         "{expanded ? story.quote : `${preview}...`}"
       </blockquote>
 
@@ -276,7 +275,9 @@ const ExpandableStory = ({ story, index }) => {
               Resultado:
             </span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">{story.outcome}</p>
+          <p className="text-xs text-muted-foreground mt-1 break-words">
+            {story.outcome}
+          </p>
         </motion.div>
       )}
     </motion.div>
@@ -298,17 +299,21 @@ const ExpandableType = ({ type, index }) => {
     >
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left p-6 flex items-start gap-4 hover:bg-muted/30 transition-colors active:scale-[0.995]"
+        className="w-full text-left p-5 md:p-6 flex items-start gap-4 hover:bg-muted/30 transition-colors active:scale-[0.995]"
       >
         <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center shrink-0">
           <Icon size={20} className="text-destructive" />
         </div>
+
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-foreground mb-1">{type.name}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <h3 className="font-semibold text-foreground mb-1 break-words">
+            {type.name}
+          </h3>
+          <p className="text-sm text-muted-foreground leading-relaxed break-words">
             {type.desc}
           </p>
         </div>
+
         <div className="shrink-0 mt-1">
           {expanded ? (
             <ChevronUp size={18} className="text-muted-foreground" />
@@ -323,15 +328,14 @@ const ExpandableType = ({ type, index }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="px-6 pb-6 space-y-5"
+          className="px-5 md:px-6 pb-5 md:pb-6 space-y-5"
         >
           <div className="border-t border-border pt-5">
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed break-words">
               {type.desc}
             </p>
           </div>
 
-          {/* Signs */}
           <div>
             <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3">
               Sinais de Alerta
@@ -346,18 +350,17 @@ const ExpandableType = ({ type, index }) => {
                     size={14}
                     className="text-[hsl(var(--risk-medium))] shrink-0 mt-0.5"
                   />
-                  {sign}
+                  <span className="break-words">{sign}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Chat Example */}
           <div>
             <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3">
               Exemplo Real
             </h4>
-            <div className="bg-muted/50 rounded-lg p-4">
+            <div className="bg-muted/50 rounded-lg p-3 md:p-4">
               <ChatBubble
                 message={type.example.bully}
                 sender="bully"
@@ -371,12 +374,11 @@ const ExpandableType = ({ type, index }) => {
             </div>
           </div>
 
-          {/* Impact */}
           <div className="bg-destructive/5 border border-destructive/15 rounded-lg p-4">
             <h4 className="text-xs font-semibold text-destructive uppercase tracking-wider mb-2">
               Impacto na Vítima
             </h4>
-            <p className="text-sm text-foreground/80 leading-relaxed">
+            <p className="text-sm text-foreground/80 leading-relaxed break-words">
               {type.impact}
             </p>
           </div>
@@ -389,27 +391,29 @@ const ExpandableType = ({ type, index }) => {
 const LearnPage = () => {
   return (
     <div className="min-h-screen pt-4 md:pt-20">
-      <div className="container py-8 max-w-4xl">
+      <div className="container py-6 md:py-8 max-w-4xl px-4">
         <PageHeader
           icon={BookOpen}
           title="Aprender"
           subtitle="Compreende, identifica e age perante o ciberbullying"
         />
-        <div className="mb-10 bg-secondary/5 border border-secondary/15 rounded-2xl p-6 flex items-start gap-4">
+
+        <div className="mb-8 md:mb-10 bg-secondary/5 border border-secondary/15 rounded-2xl p-5 md:p-6 flex items-start gap-4">
           <BookOpen size={32} className="text-secondary shrink-0 mt-1" />
-          <div>
+          <div className="min-w-0">
             <h2 className="font-semibold text-foreground mb-1">
               O que vais encontrar aqui?
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed break-words">
               Nesta página encontras tudo o que precisas saber sobre
               ciberbullying — desde o que é, aos tipos mais comuns, histórias
               reais de jovens portugueses e o que fazer se fores vítima.
             </p>
           </div>
         </div>
-        {/* Section: What is cyberbullying */}
-        <section id="what" className="mb-16 scroll-mt-24">
+
+        {/* What is cyberbullying */}
+        <section id="what" className="mb-14 md:mb-16 scroll-mt-24">
           <motion.div
             custom={0}
             variants={fadeUp}
@@ -418,7 +422,7 @@ const LearnPage = () => {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                 <Shield size={20} className="text-secondary" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-foreground">
@@ -426,8 +430,8 @@ const LearnPage = () => {
               </h2>
             </div>
 
-            <div className="bg-card rounded-xl border border-border p-6 md:p-8 card-shadow space-y-5">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="bg-card rounded-xl border border-border p-5 md:p-8 card-shadow space-y-5">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed break-words">
                 O <strong className="text-foreground">ciberbullying</strong> é
                 uma forma de violência e agressão que acontece através de meios
                 digitais — redes sociais, aplicações de mensagens, jogos online,
@@ -440,14 +444,16 @@ const LearnPage = () => {
                 </strong>{" "}
                 entre agressor e vítima.
               </p>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed break-words">
                 Pode manifestar-se de diversas formas: insultos e comentários
                 ofensivos, ameaças e intimidação, partilha de informações ou
                 imagens privadas sem consentimento, exclusão deliberada de
                 grupos sociais, perseguição online, criação de perfis falsos, e
                 muito mais.
               </p>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed break-words">
                 Ao contrário do bullying presencial, o ciberbullying não tem
                 fronteiras físicas nem horários. A vítima pode ser atingida a
                 qualquer hora, em qualquer lugar — mesmo em casa, no quarto, no
@@ -456,10 +462,11 @@ const LearnPage = () => {
                 permanece online indefinidamente.
               </p>
 
-              <div className="bg-secondary/5 border border-secondary/15 rounded-lg p-5">
+              <div className="bg-secondary/5 border border-secondary/15 rounded-lg p-4 md:p-5">
                 <h3 className="text-sm font-semibold text-foreground mb-2">
                   Porque é tão perigoso?
                 </h3>
+
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <TrendingUp
@@ -504,8 +511,8 @@ const LearnPage = () => {
           </motion.div>
         </section>
 
-        {/* Section: Statistics */}
-        <section id="stats" className="mb-16 scroll-mt-24">
+        {/* Statistics */}
+        <section id="stats" className="mb-14 md:mb-16 scroll-mt-24">
           <motion.div
             custom={0}
             variants={fadeUp}
@@ -514,7 +521,7 @@ const LearnPage = () => {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                 <BarChart3 size={20} className="text-secondary" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-foreground">
@@ -532,15 +539,15 @@ const LearnPage = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
-                className="bg-card rounded-xl border border-border p-5 card-shadow text-center"
+                className="bg-card rounded-xl border border-border p-4 md:p-5 card-shadow text-center"
               >
                 <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center mx-auto mb-3">
                   <stat.icon size={20} className="text-secondary" />
                 </div>
-                <p className="text-2xl md:text-3xl font-bold text-foreground mb-1">
+                <p className="text-2xl md:text-3xl font-bold text-foreground mb-1 break-words">
                   {stat.value}
                 </p>
-                <p className="text-xs text-muted-foreground leading-snug">
+                <p className="text-xs text-muted-foreground leading-snug break-words">
                   {stat.label}
                 </p>
               </motion.div>
@@ -560,8 +567,8 @@ const LearnPage = () => {
           </motion.p>
         </section>
 
-        {/* Section: Types */}
-        <section id="types" className="mb-16 scroll-mt-24">
+        {/* Types */}
+        <section id="types" className="mb-14 md:mb-16 scroll-mt-24">
           <motion.div
             custom={0}
             variants={fadeUp}
@@ -570,14 +577,15 @@ const LearnPage = () => {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center shrink-0">
                 <Megaphone size={20} className="text-destructive" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-foreground">
                 Tipos de ciberbullying
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground mb-6 ml-[52px]">
+
+            <p className="text-sm text-muted-foreground mb-6 ml-0 sm:ml-[52px]">
               Clica em cada tipo para ver exemplos, sinais de alerta e o impacto
               na vítima.
             </p>
@@ -590,8 +598,8 @@ const LearnPage = () => {
           </div>
         </section>
 
-        {/* Section: Real Stories */}
-        <section id="stories" className="mb-16 scroll-mt-24">
+        {/* Real stories */}
+        <section id="stories" className="mb-14 md:mb-16 scroll-mt-24">
           <motion.div
             custom={0}
             variants={fadeUp}
@@ -600,28 +608,29 @@ const LearnPage = () => {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                 <Heart size={20} className="text-secondary" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-foreground">
                 Histórias reais
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground mb-6 ml-[52px]">
+
+            <p className="text-sm text-muted-foreground mb-6 ml-0 sm:ml-[52px]">
               Testemunhos anónimos de jovens portugueses que enfrentaram o
               ciberbullying. Não estás sozinho/a.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {realStories.map((story, i) => (
               <ExpandableStory key={i} story={story} index={i} />
             ))}
           </div>
         </section>
 
-        {/* Section: What to do */}
-        <section id="actions" className="mb-16 scroll-mt-24">
+        {/* What to do */}
+        <section id="actions" className="mb-14 md:mb-16 scroll-mt-24">
           <motion.div
             custom={0}
             variants={fadeUp}
@@ -630,7 +639,7 @@ const LearnPage = () => {
             viewport={{ once: true, amount: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-[hsl(var(--risk-low))]/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[hsl(var(--risk-low))]/10 flex items-center justify-center shrink-0">
                 <CheckCircle
                   size={20}
                   className="text-[hsl(var(--risk-low))]"
@@ -640,7 +649,8 @@ const LearnPage = () => {
                 O que fazer se fores vítima
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground mb-6 ml-[52px]">
+
+            <p className="text-sm text-muted-foreground mb-6 ml-0 sm:ml-[52px]">
               Segue estes passos para te protegeres e obteres ajuda.
             </p>
           </motion.div>
@@ -660,14 +670,19 @@ const LearnPage = () => {
                   <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground text-sm font-bold shrink-0">
                     {item.step}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <item.icon size={16} className="text-secondary" />
-                      <h3 className="font-semibold text-foreground">
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <item.icon
+                        size={16}
+                        className="text-secondary shrink-0"
+                      />
+                      <h3 className="font-semibold text-foreground break-words">
                         {item.title}
                       </h3>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+
+                    <p className="text-sm text-muted-foreground leading-relaxed break-words">
                       {item.desc}
                     </p>
                   </div>

@@ -6,9 +6,12 @@ import {
   User,
   LogOut,
   LifeBuoy,
+  Menu,
+  X,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { useAuth } from "@/content/AuthContent";
 import pspLogo from "@/assets/psp.jpg";
 
@@ -24,10 +27,17 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
+    setMobileOpen(false);
     navigate("/");
+  };
+
+  const handleNavigate = (path) => {
+    setMobileOpen(false);
+    navigate(path);
   };
 
   const isActivePath = (path) => location.pathname === path;
@@ -35,17 +45,20 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-card/95 backdrop-blur-lg">
       <div className="container h-16 flex items-center justify-between">
-        {/* Logo PSP */}
-        <button onClick={() => navigate("/")} className="flex items-center">
+        {/* Logo */}
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center shrink-0"
+        >
           <img
             src={pspLogo}
             alt="Polícia de Segurança Pública"
-            className="h-16 w-auto object-contain"
+            className="h-14 md:h-16 w-auto object-contain"
           />
         </button>
 
-        {/* Links centrados */}
-        <nav className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-1">
           {navItems.map((item) => {
             const isActive = isActivePath(item.path);
 
@@ -78,8 +91,8 @@ const Navbar = () => {
           })}
         </nav>
 
-        {/* Lado direito */}
-        <div className="flex items-center justify-end gap-2 min-w-[160px]">
+        {/* Desktop right side */}
+        <div className="hidden lg:flex items-center justify-end gap-2 min-w-[180px]">
           {isAuthenticated ? (
             <>
               <button
@@ -93,7 +106,7 @@ const Navbar = () => {
                 <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
                   <User size={16} />
                 </div>
-                <span className="text-sm font-medium hidden sm:block max-w-[100px] truncate">
+                <span className="text-sm font-medium hidden xl:block max-w-[110px] truncate">
                   {user?.name}
                 </span>
               </button>
@@ -115,7 +128,92 @@ const Navbar = () => {
             </button>
           )}
         </div>
+
+        {/* Mobile right side */}
+        <div className="flex lg:hidden items-center gap-2">
+          {isAuthenticated && (
+            <button
+              onClick={() => navigate("/perfil")}
+              className="p-2 rounded-lg hover:bg-muted transition"
+              title="Perfil"
+            >
+              <User size={18} />
+            </button>
+          )}
+
+          <button
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="p-2 rounded-lg hover:bg-muted transition"
+            title="Menu"
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="lg:hidden border-t border-border bg-card"
+          >
+            <div className="container py-4 space-y-2">
+              {navItems.map((item) => {
+                const isActive = isActivePath(item.path);
+
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => handleNavigate(item.path)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${
+                      isActive
+                        ? "bg-secondary/10 text-secondary"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <item.icon size={18} />
+                    {item.label}
+                  </button>
+                );
+              })}
+
+              {isAuthenticated ? (
+                <>
+                  <button
+                    onClick={() => handleNavigate("/perfil")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${
+                      isActivePath("/perfil")
+                        ? "bg-secondary/10 text-secondary"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <User size={18} />
+                    Perfil
+                  </button>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-foreground hover:bg-muted transition"
+                  >
+                    <LogOut size={18} />
+                    Terminar sessão
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => handleNavigate("/analisar")}
+                  className="w-full px-4 py-3 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold hover:bg-secondary/90 transition"
+                >
+                  Entrar
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
