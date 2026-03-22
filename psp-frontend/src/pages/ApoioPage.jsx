@@ -17,13 +17,13 @@ const supportEntities = [
   {
     name: "Linha SOS Criança",
     description: "Apoio a crianças e jovens em situação de risco",
-    phone: "116 111",
-    website: "www.iac.pt",
+    phone: "21 361 78 80",
+    website: "www.iacrianca.pt",
   },
   {
     name: "Internet Segura",
     description: "Linha de denúncia e apoio sobre segurança online",
-    phone: "800 219 090",
+    phone: "210 497 400",
     website: "www.internetsegura.pt",
   },
   {
@@ -41,36 +41,44 @@ const checklist = [
   "Descrição detalhada do que aconteceu e como se sente",
 ];
 
-const QuickCard = ({ icon: Icon, title, description, primary, secondary }) => (
-  <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
-    <div className="w-11 h-11 rounded-xl bg-secondary/10 flex items-center justify-center mb-4">
-      <Icon size={20} className="text-secondary" />
+const QuickCard = ({ icon: Icon, title, description, primary, secondary }) => {
+  const PrimaryIcon = primary?.icon;
+  const SecondaryIcon = secondary?.icon;
+
+  return (
+    <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
+      <div className="w-11 h-11 rounded-xl bg-secondary/10 flex items-center justify-center mb-4">
+        <Icon size={20} className="text-secondary" />
+      </div>
+      <h3 className="text-base font-bold text-foreground mb-2">{title}</h3>
+      <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+        {description}
+      </p>
+      <div className="space-y-2">
+        {primary && (
+          <a
+            href={primary.href}
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold hover:bg-secondary/90 transition-colors"
+          >
+            {PrimaryIcon && <PrimaryIcon size={16} />}
+            {primary.label}
+          </a>
+        )}
+        {secondary && (
+          <a
+            href={secondary.href}
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border text-foreground text-sm font-semibold hover:bg-muted transition-colors"
+          >
+            {SecondaryIcon && <SecondaryIcon size={16} />}
+            {secondary.label}
+          </a>
+        )}
+      </div>
     </div>
+  );
+};
 
-    <h3 className="text-base font-bold text-foreground mb-2">{title}</h3>
-    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-      {description}
-    </p>
-
-    <div className="space-y-2">
-      {primary && (
-        <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold hover:bg-secondary/90 transition-colors">
-          {primary.icon && <primary.icon size={16} />}
-          {primary.label}
-        </button>
-      )}
-
-      {secondary && (
-        <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border text-foreground text-sm font-semibold hover:bg-muted transition-colors">
-          {secondary.icon && <secondary.icon size={16} />}
-          {secondary.label}
-        </button>
-      )}
-    </div>
-  </div>
-);
-
-const InfoItem = ({ icon: Icon, label, value, helper }) => (
+const InfoItem = ({ icon: Icon, label, value, helper, href, newTab }) => (
   <div className="flex items-start gap-3">
     <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
       <Icon size={18} className="text-secondary" />
@@ -79,7 +87,18 @@ const InfoItem = ({ icon: Icon, label, value, helper }) => (
       <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
         {label}
       </p>
-      <p className="text-sm font-semibold text-foreground mt-1">{value}</p>
+      {href ? (
+        <a
+          href={href}
+          target={newTab ? "_blank" : undefined}
+          rel={newTab ? "noopener noreferrer" : undefined}
+          className="text-sm font-semibold text-secondary hover:underline mt-1 block"
+        >
+          {value}
+        </a>
+      ) : (
+        <p className="text-sm font-semibold text-foreground mt-1">{value}</p>
+      )}
       {helper && <p className="text-xs text-muted-foreground mt-1">{helper}</p>}
     </div>
   </div>
@@ -140,23 +159,43 @@ const ApoioPage = () => {
               icon={MessageCircle}
               title="Falar com alguém"
               description="Converse com o nosso assistente virtual ou contacte-nos diretamente."
-              primary={{ icon: MessageCircle, label: "Assistente Virtual" }}
-              secondary={{ icon: Mail, label: "Email PSP" }}
+              primary={{
+                icon: MessageCircle,
+                label: "Assistente Virtual",
+                href: "/assistente",
+              }}
+              secondary={{
+                icon: Mail,
+                label: "Email PSP",
+                href: "mailto:cmlisboa@psp.pt",
+              }}
             />
 
             <QuickCard
               icon={Phone}
               title="Ajuda urgente"
               description="Contactos diretos para situações que requerem atenção imediata."
-              primary={{ icon: Phone, label: "Emergência 112" }}
-              secondary={{ icon: Phone, label: "Linha Direta PSP" }}
+              primary={{
+                icon: Phone,
+                label: "Emergência 112",
+                href: "tel:112",
+              }}
+              secondary={{
+                icon: Phone,
+                label: "Linha Direta PSP",
+                href: "tel:+351217654242",
+              }}
             />
 
             <QuickCard
               icon={MapPin}
               title="Esquadras PSP"
               description="Encontre a esquadra mais próxima para atendimento presencial."
-              primary={{ icon: MapPin, label: "Ver no mapa" }}
+              primary={{
+                icon: MapPin,
+                label: "Ver no mapa",
+                href: "/contactos",
+              }}
             />
           </section>
 
@@ -171,7 +210,8 @@ const ApoioPage = () => {
                   Polícia de Segurança Pública
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Departamento de Cibersegurança
+                  A PSP é a força policial responsável pela segurança pública em
+                  Portugal.
                 </p>
               </div>
             </div>
@@ -182,21 +222,24 @@ const ApoioPage = () => {
                 label="Telefone"
                 value="+351 217 654 242"
                 helper="Dias úteis, 9h–18h"
+                href="tel:+351217654242"
               />
 
               <InfoItem
                 icon={Mail}
                 label="Email"
-                value="ciberbullying@psp.pt"
+                value="cmlisboa@psp.pt"
                 helper="Resposta em 24–48h"
+                href="mailto:cmlisboa@psp.pt"
               />
 
               <InfoItem
                 icon={Globe}
                 label="Website"
-                value="www.psp.pt
-                "
+                value="www.psp.pt"
                 helper="Informação e recursos"
+                href="https://www.psp.pt"
+                newTab={true}
               />
 
               <InfoItem
@@ -230,15 +273,22 @@ const ApoioPage = () => {
                   </p>
 
                   <div className="flex flex-wrap gap-4 text-sm">
-                    <span className="inline-flex items-center gap-2 text-secondary font-medium">
+                    <a
+                      href={`tel:${entity.phone.replace(/\s/g, "")}`}
+                      className="inline-flex items-center gap-2 text-secondary font-medium hover:underline"
+                    >
                       <Phone size={14} />
                       {entity.phone}
-                    </span>
-
-                    <span className="inline-flex items-center gap-2 text-secondary font-medium">
+                    </a>
+                    <a
+                      href={`https://${entity.website}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-secondary font-medium hover:underline"
+                    >
                       <Globe size={14} />
                       {entity.website}
-                    </span>
+                    </a>
                   </div>
                 </motion.div>
               ))}
