@@ -63,5 +63,3 @@ Cyberbullying is a growing reality in Portugal, particularly affecting children 
 Project built in **72 hours** during a March 2026 hackathon, in response to a real-world challenge proposed by the PSP. The focus was on delivering a functional, accessible solution with direct social impact.
 
 ---
-
-*Developed with ❤️ for a safer internet.*
